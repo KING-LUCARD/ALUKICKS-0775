@@ -10,4 +10,5 @@ RUN bun run build:web
 ENV PORT=3000
 EXPOSE 3000
 
-CMD ["bun", "--cwd", "packages/web", "run", "start"]
+# Avoid Bun CLI flag parsing issues by changing directory in the shell.
+CMD ["sh", "-c", "cd packages/web && bun run start"]
