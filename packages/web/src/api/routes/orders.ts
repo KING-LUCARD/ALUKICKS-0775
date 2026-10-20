@@ -12,17 +12,17 @@ export const orders = {
   create: base
     .input(
       z.object({
-        email: z.string().email(),
-        name: z.string().min(2),
+        email: z.string().email().max(254),
+        name: z.string().trim().min(2).max(100),
         address: z.object({
-          line1: z.string().min(3),
-          city: z.string().min(2),
-          postcode: z.string().min(2),
-          country: z.string().min(2),
+          line1: z.string().trim().min(3).max(200),
+          city: z.string().trim().min(2).max(100),
+          postcode: z.string().trim().min(2).max(20),
+          country: z.string().trim().min(2).max(80),
         }),
         items: z
           .array(z.object({ productId: z.string(), size: z.number(), qty: z.number().int().min(1).max(10) }))
-          .min(1),
+          .min(1).max(20),
       }),
     )
     .handler(async ({ input }) => {
