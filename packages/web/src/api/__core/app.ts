@@ -29,7 +29,18 @@ export const base = os.$context<RpcContext>();
 export function createApp(router: Router<Record<never, never>, RpcContext>) {
   const app = new Hono().use(
     cors({
-      origin: (origin) => origin ?? "*",
+      origin: (origin) => {
+        if (!origin) return "";
+        const configuredSite = process.env.WEBSITE_URL?.replace(/\/$/, "");
+        const allowedOrigins = new Set([
+          configuredSite,
+          "http://localhost:3000",
+          "http://127.0.0.1:3000",
+          "http://localhost:5173",
+          "http://127.0.0.1:5173",
+        ].filter((value): value is string => Boolean(value)));
+        return allowedOrigins.has(origin) ? origin : "";
+      },
       credentials: true,
       // Required so the browser can read the bearer token header set by Better Auth.
       exposeHeaders: ["set-auth-token"],
