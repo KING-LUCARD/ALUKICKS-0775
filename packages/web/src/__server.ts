@@ -30,6 +30,7 @@ function withSecurityHeaders(response: Response, request: Request) {
 }
 
 const server = Bun.serve({
+  hostname: "0.0.0.0",
   port,
   async fetch(request) {
     const url = new URL(request.url);
